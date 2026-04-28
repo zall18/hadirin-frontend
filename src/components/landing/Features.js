@@ -29,7 +29,7 @@ const features = [
 
 export default function Features() {
   return (
-    <section id="fitur" className="py-32 relative overflow-hidden bg-white">
+    <section id="fitur" className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-24 max-w-3xl mx-auto">
           <motion.h2 
@@ -59,7 +59,7 @@ export default function Features() {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 + 0.2 }}
               key={idx}
-              className={`p-10 rounded-[2rem] border ${feature.border} bg-white shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-300 group relative overflow-hidden`}
+              className={`p-10 rounded-[2.5rem] border ${feature.border} bg-white/40 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.05)] hover:shadow-[0_8px_32px_0_rgba(244,63,94,0.15)] hover:-translate-y-2 hover:bg-white/60 transition-all duration-300 group relative overflow-hidden`}
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-slate-50 to-transparent rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
               <div className={`w-16 h-16 ${feature.color} rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300`}>

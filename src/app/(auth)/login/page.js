@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { Loader2, Mail, Lock, AlertCircle } from "lucide-react";
-import axiosInstance from "@/lib/axiosInstance";
+import { authApi } from "@/api/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,13 +20,13 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await axiosInstance.post("/api/auth/login", {
+      const responseData = await authApi.login({
         email,
         password,
       });
 
-      if (response.data?.success) {
-        const { user, tokens } = response.data.data;
+      if (responseData?.success) {
+        const { user, tokens } = responseData.data;
         
         // Since backend sets HTTP-only cookies in production, we might not need to manually set it.
         // But if we need client-side JS to know the token temporarily, we can do:
@@ -66,15 +66,7 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <div className="text-center md:text-left mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">Selamat Datang</h2>
-        <p className="text-slate-500">
-          Masuk ke akun Hadirin Anda untuk melanjutkan.
-        </p>
-      </div>
-
-      <form onSubmit={handleLogin} className="space-y-6">
+    <>      <form onSubmit={handleLogin} className="space-y-6">
         {error && (
           <div className="bg-red-50 text-red-600 p-4 rounded-xl flex items-start gap-3 border border-red-100 text-sm">
             <AlertCircle className="w-5 h-5 shrink-0" />

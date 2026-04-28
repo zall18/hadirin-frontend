@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
-import axiosInstance from "@/lib/axiosInstance";
+import { adminApi } from "@/api/admin";
 import SummaryCards from "./components/SummaryCards";
 import UpcomingEvents from "./components/UpcomingEvents";
 import ActivityMetrics from "./components/ActivityMetrics";
@@ -14,9 +14,9 @@ export default function OrganizerMainDashboard() {
   const fetchOverview = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("/api/dashboard/admin/overview");
-      if (response.data?.success) {
-        setData(response.data.data);
+      const responseData = await adminApi.getOrganizerOverview();
+      if (responseData?.success) {
+        setData(responseData.data);
       }
     } catch (err) {
       console.error("Gagal mengambil overview organizer:", err);

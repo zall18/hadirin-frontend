@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axiosInstance from "@/lib/axiosInstance";
+import { eventsApi } from "@/api/events";
 import { Loader2, ArrowRight, QrCode, MapPin, Calendar, Users, Briefcase } from "lucide-react";
 import Link from "next/link";
 
@@ -13,9 +13,9 @@ export default function StaffDashboard() {
     // In actual implementation, staff is assigned to an event. Here we fetch event ID=2 based on PRD.
     const fetchEvent = async () => {
       try {
-        const response = await axiosInstance.get("/api/events/2");
-        if (response.data?.success) {
-          setEventData(response.data.data);
+        const responseData = await eventsApi.getEventOverview(2);
+        if (responseData?.success) {
+          setEventData(responseData.data);
         }
       } catch (error) {
         // Fallback dummy data

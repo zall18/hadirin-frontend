@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ShieldCheck, Plus, Mail, Lock, Phone, User, X, CheckCircle, AlertCircle, Loader2, Edit, Trash2, ArrowLeft, Calendar } from "lucide-react";
-import axiosInstance from "@/lib/axiosInstance";
+import { staffApi } from "@/api/staff";
 
 const AVAILABLE_PERMISSIONS = [
   { id: "CHECK_IN", label: "Manual Check-In" },
@@ -41,9 +41,9 @@ export default function EventStaffManagementPage() {
   const fetchStaffs = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get(`/api/events/${eventId}/staff`);
-      if (response.data?.success) {
-        setStaffs(response.data.data);
+      const responseData = await staffApi.getStaffList(eventId);
+      if (responseData?.success) {
+        setStaffs(responseData.data);
       }
     } catch (err) {
       console.error("Gagal mengambil data staff event:", err);
@@ -120,9 +120,9 @@ export default function EventStaffManagementPage() {
       }
 
       if (modalMode === "CREATE") {
-        await axiosInstance.post(`/api/events/${eventId}/staff`, payload);
+        await staffApi.createStaff(eventId, payload);
       } else {
-        await axiosInstance.put(`/api/events/${eventId}/staff/${selectedId}`, payload);
+        await staffApi.updateStaff(eventId, selectedId, payload);
       }
       
       setSuccess(true);
@@ -147,7 +147,7 @@ export default function EventStaffManagementPage() {
     if (!confirm(`Cabut akses sistem untuk Staff "${name}" pada event ini?`)) return;
     
     try {
-      await axiosInstance.delete(`/api/events/${eventId}/staff/${id}`);
+      await staffApi.deleteStaff(eventId, id);
       setStaffs(staffs.filter(s => s.id !== id));
     } catch (err) {
       alert(err.response?.data?.message || "Gagal menghapus akses staff");

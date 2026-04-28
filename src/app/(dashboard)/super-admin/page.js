@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axiosInstance from "@/lib/axiosInstance";
+import { adminApi } from "@/api/admin";
 import { Loader2 } from "lucide-react";
-import SummaryStats from "./components/SummaryStats";
-import RecentEventsTable from "./components/RecentEventsTable";
+import SummaryStats from "@/components/dashboard/super-admin/SummaryStats";
+import DashboardCharts from "@/components/dashboard/super-admin/DashboardCharts";
+import RecentEventsTable from "@/components/dashboard/super-admin/RecentEventsTable";
 
 export default function SuperAdminDashboard() {
   const [data, setData] = useState(null);
@@ -13,9 +14,9 @@ export default function SuperAdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/api/dashboard/super-admin");
-        if (response.data?.success) {
-          setData(response.data.data);
+        const responseData = await adminApi.getDashboardOverview();
+        if (responseData?.success) {
+          setData(responseData.data);
         }
       } catch (err) {
         console.error("Dashboard Super Admin fetch error:", err);
@@ -30,7 +31,7 @@ export default function SuperAdminDashboard() {
      return (
       <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
         <Loader2 className="w-10 h-10 animate-spin text-rose-500" />
-        <p className="text-slate-500 animate-pulse font-medium">Memuat ringkasan sistem...</p>
+        <p className="text-slate-500 font-bold tracking-tight">Memuat metrik sistem...</p>
       </div>
     );
   }
@@ -39,16 +40,23 @@ export default function SuperAdminDashboard() {
   const recentEvents = data?.recentEvents || [];
 
   return (
-    <>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Global Dashboard</h1>
-        <p className="text-slate-500 text-sm">
-          Ringkasan seluruh aktivitas di platform Hadirin (Super Admin)
-        </p>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="mb-8 flex justify-between items-end">
+        <div>
+           <h1 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">Global Dashboard</h1>
+           <p className="text-slate-500 font-medium">
+             Ringkasan performa dan aktivitas di seluruh jaringan platform Hadirin.
+           </p>
+        </div>
+        <div className="hidden sm:flex bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm items-center gap-2 text-sm font-semibold text-slate-600">
+           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+           Sistem berjalan optimal
+        </div>
       </div>
 
       <SummaryStats summary={summary} />
+      <DashboardCharts />
       <RecentEventsTable recentEvents={recentEvents} />
-    </>
+    </div>
   );
 }

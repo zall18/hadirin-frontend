@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axiosInstance from "@/lib/axiosInstance";
-import ClientHeader from "./components/ClientHeader";
-import ClientTable from "./components/ClientTable";
-import ClientModal from "./components/ClientModal";
+import { adminApi } from "@/api/admin";
+import ClientHeader from "@/components/dashboard/super-admin/clients/ClientHeader";
+import ClientTable from "@/components/dashboard/super-admin/clients/ClientTable";
+import ClientModal from "@/components/dashboard/super-admin/clients/ClientModal";
 
 export default function ClientsManagementPage() {
   const [clients, setClients] = useState([]);
@@ -23,9 +23,9 @@ export default function ClientsManagementPage() {
   const fetchClients = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("/api/admin/");
-      if (response.data?.success) {
-        setClients(response.data.data.admins);
+      const responseData = await adminApi.getClients();
+      if (responseData?.success) {
+        setClients(responseData.data.admins);
       }
     } catch (err) {
       console.error("Gagal mengambil data admin:", err);
@@ -57,12 +57,12 @@ export default function ClientsManagementPage() {
 
     try {
       if (modalMode === "CREATE") {
-        await axiosInstance.post("/api/admin/", formData);
+        await adminApi.createClient(formData);
       } else {
         // Buat payload untuk edit (jangan kirim password jika kosong)
         const payload = { ...formData };
         if (!payload.password) delete payload.password;
-        await axiosInstance.put(`/api/admin/${selectedClient.id}`, payload);
+        await adminApi.updateClient(selectedClient.id, payload);
       }
       
       setSuccess(true);
@@ -87,7 +87,7 @@ export default function ClientsManagementPage() {
     if (!confirm(`Apakah Anda yakin ingin menghapus sistem untuk admin "${name}"?`)) return;
     
     try {
-      await axiosInstance.delete(`/api/admin/${id}`);
+      await adminApi.deleteClient(id);
       setClients(clients.filter(c => c.id !== id));
     } catch (err) {
       alert(err.response?.data?.message || "Gagal menghapus admin");
@@ -98,7 +98,7 @@ export default function ClientsManagementPage() {
     try {
        // Optimistic UI update
        setClients(clients.map(c => c.id === id ? { ...c, isActive: !currentStatus } : c));
-       await axiosInstance.patch(`/api/admin/${id}/toggle-status`);
+       await adminApi.toggleClientStatus(id);
     } catch (err) {
        // Revert UI Update on failure
        setClients(clients.map(c => c.id === id ? { ...c, isActive: currentStatus } : c));
@@ -107,7 +107,7 @@ export default function ClientsManagementPage() {
   };
 
   return (
-    <>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <ClientHeader onAddClick={() => openModal("CREATE")} />
 
       <ClientTable 
@@ -128,6 +128,6 @@ export default function ClientsManagementPage() {
         error={error}
         success={success}
       />
-    </>
+    </div>
   );
 }

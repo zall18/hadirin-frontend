@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 // Gunakan @ untuk path absolut yang aman ke root folder src/
-import axiosInstance from "@/lib/axiosInstance";
+import { authApi } from "@/api/auth";
 import { clearAuthCookies } from "@/app/actions/auth";
 
 export default function LogoutButton() {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -17,8 +19,8 @@ export default function LogoutButton() {
         setError("");
 
         try {
-            // Coba memanggil API logout di backend (hanya opsional mengamankan sesi di backend)
-            await axiosInstance.post("/api/auth/logout");
+            // Panggil endpoint logout di backend
+            await authApi.logout();
         } catch (err) {
             console.error("Logout API bypass:", err);
             // Tetap jalankan penghapusan cookie meskipun API gagal

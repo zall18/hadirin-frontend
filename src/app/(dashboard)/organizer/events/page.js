@@ -7,7 +7,7 @@ import {
   Settings, Loader2, Globe, Clock, Power, ShieldCheck,
   MoreVertical, Edit
 } from "lucide-react";
-import axiosInstance from "@/lib/axiosInstance";
+import { eventsApi } from "@/api/events";
 
 export default function OrganizerDashboard() {
   const [events, setEvents] = useState([]);
@@ -17,9 +17,9 @@ export default function OrganizerDashboard() {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("/api/events/my-events");
-      if (response.data?.success) {
-        setEvents(response.data.data.events || []);
+      const responseData = await eventsApi.getMyEvents();
+      if (responseData?.success) {
+        setEvents(responseData.data.events || []);
       }
     } catch (err) {
       console.error("Gagal mengambil event organizer:", err);
@@ -40,7 +40,7 @@ export default function OrganizerDashboard() {
   const handleDuplicate = async (id, title) => {
     if (!confirm(`Duplikasi event "${title}"?`)) return;
     try {
-      await axiosInstance.post(`/api/events/${id}/duplicate`);
+      await eventsApi.duplicateEvent(id);
       fetchEvents();
     } catch (err) {
       alert("Gagal menduplikasi event.");
@@ -50,7 +50,7 @@ export default function OrganizerDashboard() {
   const handleDelete = async (id, title) => {
     if (!confirm(`Peringatan: Seluruh data untuk event "${title}" akan dihapus. Lanjutkan?`)) return;
     try {
-      await axiosInstance.delete(`/api/events/${id}`);
+      await eventsApi.deleteEvent(id);
       setEvents(events.filter(e => e.id !== id));
     } catch (err) {
       alert("Gagal menghapus event.");
@@ -59,7 +59,7 @@ export default function OrganizerDashboard() {
 
   const handleTogglePublish = async (id) => {
     try {
-       await axiosInstance.patch(`/api/events/${id}/toggle-publish`);
+       await eventsApi.togglePublish(id);
        fetchEvents(); // Refresh data immediately
     } catch (err) {
        alert("Gagal mengubah status rilis event.");

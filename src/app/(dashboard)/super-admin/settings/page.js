@@ -51,13 +51,13 @@ export default function PlatformSettingsPage() {
 
   return (
     <>
-      <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-2">
-            <Settings className="w-8 h-8 text-rose-500" /> Pengaturan Platform
+          <h1 className="text-3xl font-black text-slate-800 mb-2 flex items-center gap-2 tracking-tight">
+             Pengaturan Platform
           </h1>
-          <p className="text-slate-500 text-sm">
-            Konfigurasi utama yang mengendalikan seluruh sistem aplikasi
+          <p className="text-slate-500 font-medium">
+            Konfigurasi utama yang mengendalikan seluruh sistem aplikasi Hadirin
           </p>
         </div>
         
@@ -71,7 +71,7 @@ export default function PlatformSettingsPage() {
         </button>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
         {/* Sidebar Nav Settings */}
         <aside className="md:w-64 shrink-0">
           <nav className="flex flex-col space-y-1">
@@ -114,13 +114,13 @@ export default function PlatformSettingsPage() {
         </aside>
 
         {/* Content Form */}
-        <div className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div className="flex-1 bg-white rounded-3xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 sm:p-10">
           
           {/* TAB UMUM */}
           {activeTab === "umum" && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-5">Pengaturan Umum</h3>
+                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-50 pb-4 mb-6">Pengaturan Umum</h3>
               </div>
               <div className="grid gap-6 max-w-2xl">
                 <div>
@@ -165,7 +165,7 @@ export default function PlatformSettingsPage() {
           {activeTab === "fitur" && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-5">Batas Kuota Fitur</h3>
+                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-50 pb-4 mb-6">Batas Kuota Fitur</h3>
               </div>
               <div className="grid gap-6 max-w-2xl">
                 <div>
@@ -213,7 +213,7 @@ export default function PlatformSettingsPage() {
           {activeTab === "integrasi" && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-5">Integrasi Sender WhatsApp</h3>
+                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-50 pb-4 mb-6">Integrasi Sender WhatsApp</h3>
               </div>
               <div className="grid gap-6 max-w-2xl">
                 <div>
